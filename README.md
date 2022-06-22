@@ -25,4 +25,4 @@ Note:
 * Then you implement more website data and functionality
 
 #### You can visit the website after deploying with heroku  
-[a link](https://dut-bch-shop.herokuapp.com/)
+[https://dut-bch-shop.herokuapp.com/](https://dut-bch-shop.herokuapp.com/)
