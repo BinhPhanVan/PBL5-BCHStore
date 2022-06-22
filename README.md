@@ -26,3 +26,5 @@ Note:
 
 #### You can visit the website after deploying with heroku  
 [https://dut-bch-shop.herokuapp.com/](https://dut-bch-shop.herokuapp.com/)
+    - username: bchadmin
+    - password: admin
