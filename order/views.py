@@ -6,6 +6,7 @@ from django.views import View
 from product.models import Product, Category
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from product.views import Cart
 # Create your views here.
 def getTotal(cart):
     s = 0
@@ -15,9 +16,9 @@ def getTotal(cart):
 @login_required(login_url='/user/login/')
 def CreateOrder(request):
     temp_cart = request.session['cart']
-    if request.method == "POST":
+    if request.method == "POST": 
         name = request.POST["name_receive"]
-        phone = request.POST["phone_number"]
+        phone = int(request.POST["phone_number"])
         user = request.user.id
         add = request.POST["address_receive"]
         des = request.POST["description"]

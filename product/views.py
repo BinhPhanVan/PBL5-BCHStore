@@ -4,21 +4,22 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views import View
 from numpy import product
+
+from user.models import CustomerUser
 from .serializers import ProductSerializer
 from .forms import ProductForm, CategoryForm, VariationFrom
-from .models import Product, Category, Variation
+from .models import Product, Category, Variation, Message
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from room.models import Message
 from order.models import Order, OrderDetail
 
 class ProductClass(View):
     def get(self, request):
         numberOrder = 0
         if request.user.is_authenticated:
-            id = request.user.id
-            numberOrder = Order.objects.filter(user=id, is_completed = False).count()
+            iduser = request.user.id
+            numberOrder = Order.objects.filter(user=iduser, is_completed = False).count()
         if 'cart' not in request.session:
             request.session['cart'] = {}
         qs1 = Category.objects.values("id", "title")
@@ -67,24 +68,27 @@ class DetailProduct(View):
     def get(self,request,id):
         if 'cart' not in request.session:
             request.session['cart'] = {}
-
         numberOrder = 0
         if request.user.is_authenticated:
             iduser = request.user.id
             numberOrder = Order.objects.filter(user=iduser, is_completed = False).count()
         product = Product.objects.get(id=id)
-        messages = Message.objects.filter(room=product)[0:25]
+        messages = Message.objects.filter(product=product)
         qs1 = Category.objects.values("id", "title")
         checkAdmin = request.user.is_superuser
-        return render(request, 'product/detail.html', {'numberOrder': numberOrder,'product':product, 'cart': len(request.session['cart']), 'category_title': qs1, 'checkAdmin': checkAdmin, 'messages': messages})
+        if request.user.username:
+            avatar = CustomerUser.objects.get(username=request.user.username).avatar.url            
+        else:
+            avatar = 'aaa'
+        return render(request, 'product/detail.html', {'numberOrder': numberOrder,'product':product, 'cart': len(request.session['cart']), 'category_title': qs1, 'checkAdmin': checkAdmin, 'messages': messages, 'avatar': avatar})
 
 def category_search(request, id):
     if 'cart' not in request.session:
             request.session['cart'] = {}
     numberOrder = 0
     if request.user.is_authenticated:
-        id = request.user.id
-        numberOrder = Order.objects.filter(user=id, is_completed = False).count()
+        iduser = request.user.id
+        numberOrder = Order.objects.filter(user=iduser, is_completed = False).count()
     product = Product.objects.filter(category = id)
     qs1 = Category.objects.values("id", "title")
     checkAdmin = request.user.is_superuser
@@ -225,3 +229,13 @@ class SearchProduct(View):
         qs = Product.objects.filter(title__icontains=name)
         data = ProductSerializer(qs, many=True)
         return JsonResponse(data.data, safe=False, status=200)
+
+class CreateMessage(View):
+    def post(self, request):
+        id_product = request.POST.get('id_product')
+        id_user = request.user.id
+        message = request.POST.get('message')
+        product = Product.objects.get(id=id_product)
+        user = CustomerUser.objects.get(id=id_user)
+        Message.objects.create(product=product, user=user, message=message)
+        return redirect('/product/detail/'+str(id_product)+'/')

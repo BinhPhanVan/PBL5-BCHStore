@@ -1,3 +1,6 @@
+const full = location.protocol + '//' + location.host;
+
+let path = full + "/product/detail/"
 function search(name) {
     $.ajax({
         url: `/product/search/${name}`,
@@ -13,7 +16,7 @@ function search(name) {
                 let div_child = document.createElement('div')
                 div_child.setAttribute('class', 'shadow p-3 bg-body rounded')
                 let a = document.createElement('a');
-                a.setAttribute('href', `detail/${response[i].id}/`)
+                a.setAttribute('href', path + response[i].id + "/")
                 a.setAttribute('class', 'text-decoration-none')
                 a.innerHTML = response[i].title
                 div_child.appendChild(a)

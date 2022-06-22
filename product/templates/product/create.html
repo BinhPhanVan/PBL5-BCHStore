@@ -16,7 +16,7 @@
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
 
-        <div class="mb3">
+        <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Description</label>
             {{productForm.description}}
         </div>
@@ -50,19 +50,5 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-
-    <!-- <h1>Cach ra</h1>
-
-    <form action="{% url 'Product:add-product' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <p> <label>title: </label> {{productForm.title}}</p>
-        <p> <label>description: </label> {{productForm.description}}</p>
-        <p> <label>category: </label> {{productForm.category}}</p>
-        <p> <label>price: </label> {{productForm.price}}</p>
-        <p> <label>active: </label> {{productForm.active}}</p>
-        <p> <label>Image: </label> {{productForm.product_img}}</p>
-        <p> <label>ImageView: </label> {{productForm.image_view}}</p>
-        <input type="submit" value=Submit>
-    </form> -->
 </div>
 {% endblock %}

@@ -32,4 +32,7 @@ urlpatterns = [
     path("addCart/<int:id>/", views.AddCart, name='addCart'),
     path("cart/", views.Cart, name='cart'),
     path("DeleteCart/<int:id>/", views.DeleteCart, name='delete-item-cart'),
+
+    path('addmessage/', views.CreateMessage.as_view(), name='add_message'),
+
     ]

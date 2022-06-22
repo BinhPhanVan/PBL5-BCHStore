@@ -1,5 +1,6 @@
-from tkinter import TRUE
 from django.db import models
+
+from user.models import CustomerUser
 
 # Create your models here.
 
@@ -30,3 +31,12 @@ class Variation(models.Model):
     inventory = models.IntegerField(default=0)
     def __str__(self):
         return self.title
+
+class Message(models.Model):
+    product = models.ForeignKey(Product, related_name='messages', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomerUser, on_delete=models.CASCADE)
+    message = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True) 
+
+    def __str__(self):
+        return self.message

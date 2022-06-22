@@ -21,7 +21,7 @@
                     <a href="{% url 'Product:detail-product' item.id %}" class="link-div text-decoration-none">
                         <h5 class="card-title">Tên sản phẩm: {{ item.title }}</h5>
                         <p class="card-text">{{ item.description }}</p>
-                        <h6 class="card-price text-center">{{ item.price }} VND</h6>
+                        <h5 class="card-price text-center price-product">{{ item.price }} VNĐ</h5>
                     </a>
                     <div class="card-btn d-flex justify-content-center">
                         {% if checkAdmin %}

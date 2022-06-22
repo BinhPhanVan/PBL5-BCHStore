@@ -1,5 +1,5 @@
 from django.db import models
-from product.models import Variation, Product
+from product.models import Variation
 from user.models import CustomerUser
 
 # Create your models here.

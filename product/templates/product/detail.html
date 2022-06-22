@@ -47,7 +47,7 @@
                         </ul>
                     </div>
                     <div class="d-flex justify-content-center mb-3">
-                        <h3>Giá: {{ product.price}} VND</h3>
+                        <h3 id="price-product">{{ product.price}} VNĐ</h3>
                     </div>
 
                     {% if not checkAdmin %}
@@ -97,23 +97,28 @@
 </div>
 
 <section style="background-color: #b2b2b2; border-radius: 1rem;" class="container">
-    <form method="post" action="." class="py-5 d-flex justify-content-center">
+    <form action="{% url 'Product:add_message' %}" method="POST" class="py-5 d-flex justify-content-center">
         {% csrf_token %}
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Type comment..." id="chat-message-input" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button type="button" class="btn btn-success" id="chat-message-submit">Comment</button>
+            <input type="hidden" name="id_product" value="{{product.id}}" />
+            <input type="text" class="form-control" placeholder="Type comment..." aria-label="Recipient's username"
+                aria-describedby="button-addon2" name="message">
+            <button type="submit" class="btn btn-success" id="chat-message-submit">Comment</button>
         </div>
     </form>
-      
+
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-md-12 col-lg-10">
-                <div class="card text-dark" id="chat-messages">
+                <div class="card text-dark">
                     <div class="card-body p-4">
                         <h4 class="mb-0">Recent comments</h4>
                         <p class="fw-light mb-4 pb-2">Latest Comments section by users</p>
                     </div>
                     <hr class="my-0" />
+                </div>
+                <div class="card text-dark" id="chat-messages">
+
                     {% for message in messages %}
                     <div class="card-body p-4">
                         <div class="d-flex flex-start">
@@ -128,7 +133,7 @@
                                     </p>
                                 </div>
                                 <p class="mb-0">
-                                    {{ message.content }}
+                                    {{ message.message }}
                                 </p>
                             </div>
                         </div>
@@ -140,107 +145,5 @@
         </div>
     </div>
 </section>
-
-
-{{ request.user.username|json_script:"json-username" }}
-
-{{ product.id|json_script:"json-roomname"}}
-<script>
-    const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
-    const userName = JSON.parse(document.getElementById('json-username').textContent);
-    console.log(roomName)
-    const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/'
-        + roomName
-        + '/'
-    );
-
-    chatSocket.onmessage = function (e) {
-        console.log('onmessage')
-
-        const data = JSON.parse(e.data);
-
-        if (data.message) {
-
-            let card_body = document.createElement('div');
-            card_body.setAttribute('class', 'card-body p-4')
-            let d_flex1 = document.createElement('div')
-            d_flex1.setAttribute('class', 'd-flex flex-start')
-            let img = document.createElement('img');
-            img.setAttribute('class', 'rounded-circle shadow-1-strong me-3')
-            img.setAttribute('src', '/media/')
-            img.setAttribute('alt', 'avatar')
-            img.setAttribute('width', '60')
-            img.setAttribute('height', '60')
-            let div = document.createElement('div')
-            let h6 = document.createElement('h6')
-            h6.setAttribute('class', 'fw-bold mb-1')
-            h6.innerHTML = data.username
-            let d_flex2 = document.createElement('div')
-            d_flex2.setAttribute('class', 'd-flex align-items-center mb-3')
-            let p = document.createElement('p')
-            p.setAttribute('class', 'mb-0')
-            let date = new Date()
-            p.innerHTML = date
-            let span = document.createElement('span')
-            span.setAttribute('class', 'badge bg-success')
-            let p_content = document.createElement('p')
-            p_content.setAttribute('class', "mb-0")
-            p_content.innerHTML = data.message
-            let hr = document.createElement('hr')
-            hr.setAttribute('class', 'my-0')
-
-
-            card_body.appendChild(d_flex1)
-            d_flex1.appendChild(img)
-            d_flex1.appendChild(div)
-            div.appendChild(h6)
-            div.appendChild(d_flex2)
-            d_flex2.appendChild(p)
-            p.appendChild(span)
-            div.appendChild(p_content)
-            let parent = document.getElementById('chat-messages')
-            parent.appendChild(card_body)
-            parent.appendChild(hr)
-            scrollToBottom();
-        } else {
-            alert('The message was empty!');
-        }
-    }
-
-    chatSocket.onclose = function (e) {
-        console.log('onclose')
-    }
-
-    //
-
-    document.querySelector('#chat-message-submit').onclick = function (e) {
-        e.preventDefault();
-
-        const messageInputDom = document.querySelector('#chat-message-input');
-        const message = messageInputDom.value;
-
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': userName,
-            'room': roomName
-        }));
-
-        messageInputDom.value = '';
-
-        return false;
-    }
-
-    //
-
-    function scrollToBottom() {
-        const objDiv = document.querySelector('#chat-messages');
-        objDiv.scrollTop = objDiv.scrollHeight;
-    }
-
-    scrollToBottom();
-</script>
 
 {% endblock %}

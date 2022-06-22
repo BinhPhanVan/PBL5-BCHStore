@@ -1,43 +1,6 @@
-// // function addItemLocal()
-// // {
-// //     window.localStorage.setItem("YourCart", "aaaaaa");
-// //     Cart = window.localStorage.getItem("YourCart");
-// //     if (localStorage.getItem("YourCart") === null) {
-// //         ItemCart = []
-// //         ItemCart.append("sdsdsfdfdsfds")
-// //         window.localStorage.setItem("YourCart", ItemCart);
-// //     }
-// //     else
-// //     {
-// //         Cart.append("sdsdsfdfdsfds")
-// //         window.localStorage.setItem("YourCart", ItemCart);
-// //     }
-// //     // cart = localStorage.getItem("yourCart");
-// //     // if(cart.length > 0)
-// //     // {
-// //     //     ItemCart.append("sdsdsfdfdsfds")
-// //     //     window.localStorage.setItem("ItemCart", ItemCart);
-// //     // }
-// //     // else
-// //     // {
-// //     //     ItemCart = []
-// //     //     ItemCart.append("sdsdsfdfdsfds")
-// //     //     window.localStorage.setItem("ItemCart", ItemCart);
-// //     // }
-// // }
-
-// function AddCart(id){
-//     number = 1;
-//     $.ajax({
-//         type: 'POST',
-//         url: "addCart/",
-//         data: JSON.stringify({"id": id, "number": number, "csrfmiddlewaretoken": '{{csrf_token}}'}),
-//         success: function (response) {
-//             console.log(response);
-//         },
-//         error: function (response) {
-//             console.log("sjshdsjdsajds");
-//             alert(response["responseJSON"]["error"]);
-//         }
-//     })
+// a = document.getElementsByClassName('price-product')
+// for (let i = 0; i < a.length; i++) {
+//     var x = Number(a[i].innerHTML)
+//     x = x.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+//     a[i].innerHTML = x
 // }
